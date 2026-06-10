@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6월_학평_복습웹앱_James x Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f2f7;--surface:#fff;--surface2:#f8f9fc;--border:#e2e8f0;--text:#1a202c;--text2:#4a5568;--text3:#718096;--shadow:0 2px 12px rgba(0,0,0,.07);--shadow-lg:0 8px 32px rgba(0,0,0,.10);--accent:#4f46e5;--c-r:#4f46e5;--c-l:#059669;--c-b:#7c3aed;--c-s:#d97706;--c-u:#e11d48;--c-rbg:#eef2ff;--c-lbg:#ecfdf5;--c-bbg:#f5f3ff;--c-sbg:#fffbeb;--c-ubg:#fff1f2;--hl:#fef08a;--hlb:#eab308;--abg:#f0fdf4;--ab:#86efac;--nw:220px}
+[data-theme="dark"]{--bg:#0f172a;--surface:#1e293b;--surface2:#162032;--border:#2d3f55;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--shadow:0 2px 12px rgba(0,0,0,.3);--shadow-lg:0 8px 32px rgba(0,0,0,.4);--c-rbg:#1e1b4b;--c-lbg:#022c22;--c-bbg:#2e1065;--c-sbg:#1c1009;--c-ubg:#1c0613;--hl:#854d0e;--hlb:#ca8a04;--abg:#052e16;--ab:#16a34a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;transition:background .3s,color .3s}
+.app{display:flex;min-height:100vh}
+.sidebar{width:var(--nw);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:200;transition:transform .3s,background .3s;display:flex;flex-direction:column}
+.sb-head{padding:18px 14px 12px;border-bottom:1px solid var(--border)}
+.sb-title{font-family:'DM Serif Display',serif;font-size:13px;color:var(--text);line-height:1.4}
+.sb-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.nav-list{padding:8px 6px 16px}
+.nav-g{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--accent);color:#fff}
+.nd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.nb{font-size:10px;padding:1px 5px;border-radius:10px;font-weight:700;margin-left:auto;flex-shrink:0}
+.main{margin-left:var(--nw);flex:1;min-width:0}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;transition:background .3s}
+.menubtn{background:none;border:none;color:var(--text);cursor:pointer;display:none;padding:6px;border-radius:6px}
+@media(max-width:768px){.menubtn{display:flex;align-items:center;justify-content:center}}
+.sw{flex:1;max-width:360px;position:relative}
+.si{width:100%;padding:7px 10px 7px 32px;border:1.5px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:all .2s}
+.si:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+.sic{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
+.sc{font-size:11px;color:var(--text3);white-space:nowrap}
+.tbr{margin-left:auto;display:flex;align-items:center;gap:8px}
+.dkbtn{background:none;border:1.5px solid var(--border);color:var(--text);cursor:pointer;padding:5px 11px;border-radius:7px;font-size:12px;font-family:'Noto Sans KR',sans-serif;transition:all .2s;display:flex;align-items:center;gap:4px}
+.dkbtn:hover{background:var(--surface2)}
+.prbtn{background:var(--accent);border:none;color:#fff;cursor:pointer;padding:5px 13px;border-radius:7px;font-size:12px;font-family:'Noto Sans KR',sans-serif;transition:all .2s;display:flex;align-items:center;gap:4px}
+.prbtn:hover{opacity:.88}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+.ld{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.hero{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 55%,#a855f7 100%);padding:32px 28px 28px;color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-30px;right:-20px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.75;margin-bottom:7px}
+.ht{font-family:'DM Serif Display',serif;font-size:clamp(20px,4vw,30px);font-weight:400;line-height:1.2;margin-bottom:5px}
+.hsub{font-size:12px;opacity:.72;margin-bottom:16px}
+.hstats{display:flex;gap:14px;flex-wrap:wrap}
+.hs{background:rgba(255,255,255,.14);border-radius:9px;padding:7px 14px;text-align:center;backdrop-filter:blur(8px)}
+.hsn{font-size:20px;font-weight:700;display:block}
+.hsl{font-size:10px;opacity:.78;display:block}
+.hcredit{margin-top:16px;font-size:11px;opacity:.55;letter-spacing:.5px;font-family:'JetBrains Mono',monospace}
+.ca{padding:20px;max-width:940px}
+@media(max-width:600px){.ca{padding:12px}}
+.slbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin:24px 0 10px;padding-left:2px}
+.qcard{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;transition:box-shadow .2s;border:1px solid var(--border);scroll-margin-top:68px}
+.qcard:hover{box-shadow:var(--shadow-lg)}
+.qhead{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+.qbar{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}
+.qnum{font-size:20px;font-weight:700;font-family:'DM Serif Display',serif;min-width:40px;flex-shrink:0}
+.qtype{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0;letter-spacing:.4px}
+.qtopic{font-size:13.5px;font-weight:600;color:var(--text);flex:1;line-height:1.4}
+.qpts{font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0}
+.qchev{transition:transform .3s;color:var(--text3);flex-shrink:0}
+.qcard.open .qchev{transform:rotate(180deg)}
+.qbody{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1)}
+.qcard.open .qbody{max-height:9999px}
+.qinner{padding:0 18px 18px}
+.ansbox{background:var(--abg);border:1.5px solid var(--ab);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.ansnum{font-size:24px;font-weight:700;color:#16a34a;font-family:'DM Serif Display',serif;line-height:1;flex-shrink:0}
+.anstxt{font-size:13px;color:var(--text2)}
+.anslbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#16a34a;display:block;margin-bottom:2px}
+.kswrap{background:var(--surface2);border-radius:10px;padding:13px 16px;margin-bottom:14px;border-left:3px solid var(--hlb)}
+.kslbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.ks{font-size:13px;line-height:1.85;font-family:'JetBrains Mono',monospace;color:var(--text)}
+.hly{background:var(--hl);padding:1px 3px;border-radius:3px;font-style:normal}
+.hlr{background:#fee2e2;padding:1px 3px;border-radius:3px;color:#b91c1c;font-style:normal}
+.ksko{font-size:11px;color:var(--text3);margin-top:6px;font-family:'Noto Sans KR',sans-serif;font-style:italic;line-height:1.6}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.tbtn{padding:7px 13px;border:none;background:none;color:var(--text3);font-size:11.5px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-weight:500}
+.tbtn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tbtn:hover{color:var(--text)}
+.tpanel{display:none;padding-top:13px;animation:fi .2s ease}
+.tpanel.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.rlist{list-style:none}
+.ritem{padding:8px 12px;border-radius:7px;font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:5px;background:var(--surface2);border-left:2px solid var(--accent)}
+.wbox{margin-top:9px;background:var(--surface2);border-radius:7px;padding:9px 12px;border-left:2px solid #f87171;font-size:12px;color:var(--text3);line-height:1.7}
+.wlbl{font-weight:700;color:#ef4444;font-size:10px;letter-spacing:.5px;display:block;margin-bottom:3px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px}
+.vcard{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:9px 11px}
+.vw{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);display:flex;align-items:baseline;gap:5px}
+.vp{font-size:9px;font-weight:600;color:var(--text3);font-family:'Noto Sans KR',sans-serif;padding:1px 4px;border:1px solid var(--border);border-radius:3px}
+.vm{font-size:12px;color:var(--text2);margin-top:3px}
+.vs{font-size:11px;color:#f59e0b;margin-top:2px}
+.slist{display:flex;flex-direction:column;gap:7px}
+.sitem{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;background:var(--surface2);border-radius:9px}
+.sp{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;color:var(--c-b);flex-shrink:0;min-width:190px}
+.sarr{color:var(--text3);font-size:13px;flex-shrink:0;margin-top:1px}
+.sm{font-size:12.5px;color:var(--text2)}
+@media(max-width:560px){.sp{min-width:auto}}
+.glist{display:flex;flex-direction:column;gap:9px}
+.gitem{background:var(--surface2);border-radius:9px;padding:11px 13px;border-left:3px solid var(--c-s)}
+.gn{font-size:12.5px;font-weight:700;color:var(--c-s);margin-bottom:3px}
+.gd{font-size:12px;color:var(--text2);margin-bottom:5px;line-height:1.6}
+.gex{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text3);background:var(--surface);padding:5px 8px;border-radius:5px;border:1px solid var(--border)}
+.tlist{list-style:none;display:flex;flex-direction:column;gap:6px}
+.titem{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text2);padding:7px 11px;background:var(--surface2);border-radius:7px;line-height:1.6}
+.tick{color:#22c55e;font-size:14px;flex-shrink:0;margin-top:1px}
+.shl{background:#fef3c7;border-radius:2px;color:#92400e}
+[data-theme="dark"] .shl{background:#78350f;color:#fde68a}
+.hidden{display:none!important}
+.trans-body{font-size:13px;color:var(--text2);line-height:2;background:var(--surface2);border-radius:10px;padding:14px 16px}
+.trans-body p{margin-bottom:10px}
+.cg-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding-left:2px}
+.trans-body p:last-child{margin-bottom:0}
+.trans-sent{display:block;padding:3px 0;border-bottom:1px dashed var(--border)}
+.trans-sent:last-child{border-bottom:none}
+.trans-note{font-size:11px;font-weight:700;color:var(--c-s);display:inline-block;margin-right:6px;font-style:normal}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150}
+@media(max-width:768px){.overlay.show{display:block}}
+/* TYPE COLORS */
+.reading .qbar{background:var(--c-r)}.reading .qnum{color:var(--c-r)}.reading .qtype{background:var(--c-rbg);color:var(--c-r)}
+.lang .qbar{background:var(--c-l)}.lang .qnum{color:var(--c-l)}.lang .qtype{background:var(--c-lbg);color:var(--c-l)}
+.blank .qbar{background:var(--c-b)}.blank .qnum{color:var(--c-b)}.blank .qtype{background:var(--c-bbg);color:var(--c-b)}
+.struct .qbar{background:var(--c-s)}.struct .qnum{color:var(--c-s)}.struct .qtype{background:var(--c-sbg);color:var(--c-s)}
+.summary .qbar{background:var(--c-u)}.summary .qnum{color:var(--c-u)}.summary .qtype{background:var(--c-ubg);color:var(--c-u)}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+@media print{.sidebar,.topbar,.menubtn,.dkbtn,.prbtn,.legend{display:none!important}.main{margin-left:0!important}.qcard{box-shadow:none!important;break-inside:avoid}.qbody{max-height:none!important}.tpanel{display:block!important}.tabs{display:none!important}body{font-size:12px}.hero{background:#4f46e5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeSB()"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="sb-title">2026 6월 고2<br>전국연합 영어</div>
+    <div class="sb-sub">14개 지문 핵심 복습</div>
+  </div>
+  <div class="nav-list" id="navList"></div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <button class="menubtn" onclick="toggleSB()" aria-label="메뉴">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="sw">
+      <svg class="sic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="si" id="si" placeholder="영단어, 한국어, 번호 검색..." oninput="doSearch(this.value)">
+    </div>
+    <span class="sc" id="sc"></span>
+    <div class="tbr">
+      <button class="dkbtn" onclick="toggleDark()"><span id="di">🌙</span><span id="dl">다크</span></button>
+      <button class="prbtn" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>인쇄/PDF
+      </button>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:#4f46e5"></div>독해유형</div>
+    <div class="li"><div class="ld" style="background:#059669"></div>어법·어휘</div>
+    <div class="li"><div class="ld" style="background:#7c3aed"></div>빈칸추론</div>
+    <div class="li"><div class="ld" style="background:#d97706"></div>문장구조</div>
+    <div class="li"><div class="ld" style="background:#e11d48"></div>요약</div>
+  </div>
+  <div class="hero">
+    <div class="hl">Study Guide</div>
+    <div class="ht">2026 6월 고2 학평 영어 복습용 웹앱</div>
+    <div class="hsub">핵심 지문 분석 · 정답 근거 · 어휘 · 구문 · 문법 · 출제 포인트 · 해석</div>
+    <div class="hstats">
+      <div class="hs"><span class="hsn">14</span><span class="hsl">지문</span></div>
+      <div class="hs"><span class="hsn">20–40</span><span class="hsl">문항 번호</span></div>
+      <div class="hs"><span class="hsn">100+</span><span class="hsl">핵심 어휘</span></div>
+      <div class="hs"><span class="hsn">50+</span><span class="hsl">구문·문법</span></div>
+    </div>
+    <div class="hcredit">Made by James, powered by Claude</div>
+  </div>
+  <div class="ca" id="ca"></div>
+</div>
+<script>
+const TC = {r:'#4f46e5',l:'#059669',b:'#7c3aed',s:'#d97706',u:'#e11d48'};
+const Q = [
+  {
+    id:'q20',num:20,type:'주장',tc:'reading',pts:'',
+    topic:`팀 구성 시 개인(부분)뿐 아니라 전체적 관점도 반드시 확인해야 한다`,
+    ks:`When assembling a team with a common goal, always check the <em class="hly">overall view</em> as well as <em class="hly">the individuals involved</em>.`,
+    ksko:`공통 목표를 가진 팀을 구성할 때, 관련된 개인뿐만 아니라 전반적인 관점도 항상 확인하라.`,
+    ans:`③`,anstxt:`팀을 구성할 때는 부분뿐만 아니라 전체를 고려해야 한다`,
+    rat:[
+      `'합성의 오류(fallacy of composition)'는 각 부분이 훌륭하다고 해서 전체가 반드시 좋은 것은 아님을 의미한다.`,
+      `IT 관리자와 행정관이 모두 유능하지만 역할이 중복되어 테스트 결과가 누락되는 예시, 좋은 사람들로 구성된 팀도 프로젝트 자체가 실패할 수 있다는 예시가 논리를 뒷받침한다.`,
+      `마지막 문장(always check the overall view as well as the individuals)이 필자의 핵심 주장을 직접 제시한다.`
+    ],
+    wrong:`①성공 가능성 높은 프로젝트 집중 — 지문에 없음 / ②개인 보상 — 언급 없음 / ④개인 능력 발휘를 이끄는 리더 — 전체 고려라는 핵심과 초점이 다름 / ⑤회의 방식 개선 — 전혀 무관`,
+    vocab:[
+      {w:`fallacy`,p:`n.`,m:`오류, 그릇된 생각`,s:3},
+      {w:`composition`,p:`n.`,m:`구성, 합성`,s:2},
+      {w:`productive`,p:`adj.`,m:`생산적인`,s:2},
+      {w:`efficient`,p:`adj.`,m:`효율적인`,s:2},
+      {w:`collate`,p:`v.`,m:`대조 확인하다`,s:2},
+      {w:`doomed`,p:`adj.`,m:`실패가 예정된`,s:2},
+      {w:`assemble`,p:`v.`,m:`모으다, 조립하다`,s:2},
+      {w:`assume`,p:`v.`,m:`가정하다`,s:3},
+      {w:`bring on board`,p:`phr.`,m:`합류시키다, 영입하다`,s:2},
+      {w:`interact`,p:`v.`,m:`상호작용하다`,s:2},
+      {w:`stable`,p:`adj.`,m:`안정적인`,s:2},
+      {w:`allow for`,p:`phr.`,m:`~을 고려하다`,s:2},
+      {w:`be in charge of`,p:`phr.`,m:`~을 담당하다`,s:2}
+    ],
+    structs:[
+      {p:`fail to + V`,m:`~하지 못하다`},
+      {p:`be composed of N`,m:`~으로 구성되다`},
+      {p:`A as well as B`,m:`B뿐만 아니라 A도`},
+      {p:`assume that S+V`,m:`~라고 가정하다`}
+    ],
+    grammar:[
+      {n:`as well as 병렬`,d:`'A as well as B'에서 A, B는 동일 품사/형태로 병렬. 주어 자리에 오면 A에 수 일치한다.`,ex:`always check the overall view as well as the individuals involved`},
+      {n:`It seems 형용사 to V — 가주어 구문`,d:`It might seem logical to assume that...에서 it은 가주어, to assume 이하가 진주어.`,ex:`It might seem logical to assume that the startup will be productive`},
+      {n:`each + 단수동사`,d:`each assumes처럼 each는 개별 구성원을 가리켜 항상 단수 취급.`,ex:`each assumes the other is in charge of collating test results`},
+      {n:`과거분사구 후치수식`,d:`a unit composed of good people에서 composed of가 앞 명사 unit을 수식하는 후치 분사구.`,ex:`a unit composed of good people / a project composed of good ideas`}
+    ],
+    tips:[
+      `마지막 문장(always check ~)이 필자의 주장을 직접 제시함 — 주장 문제는 항상 마지막 문장 확인`,
+      `fallacy of composition = 합성의 오류 — 전체 ≠ 부분의 합이 핵심 논리`,
+      `'as well as'로 연결된 두 요소(전체 + 개인) 파악이 정답 ③ 선택의 근거`
+    ]
+  },
+  {
+    id:`q21`,num:21,type:`의미 추론`,tc:`reading`,pts:`[3점]`,
+    topic:`진화는 상상이 현실을 완전히 대체하지 못하도록 의도적으로 제한한다`,
+    ks:`But evolution has seen to it that such internally generated representations are <em class="hly">never as authentic as the real thing</em>.`,
+    ksko:`하지만 진화는 그러한 내부적으로 생성된 표상이 결코 실제만큼 진짜이지 않도록 만들어 놓았다.`,
+    ans:`①`,anstxt:`evolution's clever limiting of how realistic your imagination is`,
+    rat:[
+      `만약 상상이 현실을 완벽하게 대체할 수 있다면, 배가 고플 때 음식을 상상하는 것으로 충족되어 실제 음식을 찾지 않게 되고 결국 굶어 죽게 된다.`,
+      `따라서 유전자(진화)는 생존을 위해 상상이 현실만큼 실감나지 않도록 스스로를 제한한다 — 이것이 바로 "a wise bit of self-restraint on your genes' part"의 의미.`,
+      `① "evolution's clever limiting of how realistic your imagination is"가 이 논리를 정확히 포착한다.`
+    ],
+    wrong:`② 인간 실패의 증거 — 긍정적 진화 역할, 지문과 반대 / ③ 불필요한 제약 — 필요한 제약임 / ④ 실제 배고픔 무시 전략 — 반대 (실제 배고픔을 느끼게 함) / ⑤ 이미지 분류 방식 — 관련 없음`,
+    vocab:[
+      {w:`imagery`,p:`n.`,m:`심상, 이미지`,s:3},
+      {w:`authentic`,p:`adj.`,m:`진짜의, 진실된`,s:3},
+      {w:`incentive`,p:`n.`,m:`동기, 유인`,s:3},
+      {w:`substitute`,p:`n.`,m:`대체물`,s:3},
+      {w:`restraint`,p:`n.`,m:`자제, 제약`,s:2},
+      {w:`rehearse`,p:`v.`,m:`예행 연습하다`,s:2},
+      {w:`cloy`,p:`v.`,m:`배부르게 하다`,s:2},
+      {w:`excel at`,p:`phr.`,m:`~에 뛰어나다`,s:2},
+      {w:`evolve`,p:`v.`,m:`진화하다`,s:3},
+      {w:`forthcoming`,p:`adj.`,m:`다가오는, 곧 있을`,s:2},
+      {w:`penalty`,p:`n.`,m:`불이익, 처벌`,s:1},
+      {w:`starve`,p:`v.`,m:`굶주리다, 굶어 죽다`,s:2},
+      {w:`on one's part`,p:`phr.`,m:`~의 편에서, ~측의`,s:2}
+    ],
+    structs:[
+      {p:`see to it that S+V`,m:`~을 확실히 하다`},
+      {p:`never as ~ as N`,m:`결코 N만큼 ~하지 않다 (부정 동등비교)`},
+      {p:`have no incentive to V`,m:`~할 동기가 없다`},
+      {p:`evolve to V`,m:`~하도록 진화하다`}
+    ],
+    grammar:[
+      {n:`가목적어 it — see to it that`,d:`see to it that절에서 it은 가목적어, that절이 진목적어. '~을 확실히 하다'의 의미.`,ex:`evolution has seen to it that representations are never as authentic as the real thing`},
+      {n:`동등비교 부정 never/not as ~ as`,d:`'never as authentic as the real thing' = 실제만큼 진짜인 적이 결코 없다. 원급 비교의 부정형.`,ex:`never as authentic as the real thing`},
+      {n:`If 가정법 과거 — 현재 반대 가정`,d:`If your internal model were a perfect substitute...you would have no incentive — 현재 사실과 반대 상황을 가정하는 가정법 과거.`,ex:`If your internal model were a perfect substitute, you would have no incentive`},
+      {n:`to부정사 형용사적 용법`,d:`ability to create an internal model에서 to create가 ability를 수식. '~할 능력' 구조.`,ex:`ability to create an internal mental picture or model of the world`}
+    ],
+    tips:[
+      `밑줄 친 구절 "self-restraint on your genes' part" = 유전자(진화)의 현명한 자기제한`,
+      `If 가정법 문장(If your internal model were a perfect substitute…)이 핵심 근거 — 가정의 결과가 반대임 파악`,
+      `역설적 논리: 상상이 덜 생생한 것이 결함이 아니라 생존을 위한 진화적 설계임`
+    ]
+  },
+  {
+    id:`q22`,num:22,type:`요지`,tc:`reading`,pts:``,
+    topic:`우리는 낮은 확률의 사건 발생 가능성을 과대평가하는 경향이 있다`,
+    ks:`<em class="hly">We overestimate the likelihood of these low-probability events.</em>`,
+    ksko:`우리는 이러한 낮은 확률의 사건들이 발생할 가능성을 과대평가한다.`,
+    ans:`②`,anstxt:`우리는 낮은 확률 사건의 발생 가능성을 과대평가한다`,
+    rat:[
+      `객관적 확률 1%를 주관적으로는 5%처럼 느끼는 현상을 설명하며, 확률이 낮을수록 과대평가 정도가 더 크다.`,
+      `로또 당첨 확률이 1억 7500만분의 1임에도 사람들이 낙관적으로 참여하는 예시가 핵심 논리를 구체적으로 뒷받침한다.`,
+      `"overestimate the likelihood"와 "factor more into decisions than they should"가 핵심 키워드로 반복된다.`
+    ],
+    wrong:`①비합리적 결정 → 조직 실패 — 언급 없음 / ③행운 의존이 성장 저해 — 무관 / ④단순한 것을 복잡하게 해석 — 반대 방향 / ⑤다양한 가능성 고려 → 최선의 결정 — 지문의 주장과 다름`,
+    vocab:[
+      {w:`objective`,p:`adj.`,m:`객관적인`,s:3},
+      {w:`subjective`,p:`adj.`,m:`주관적인`,s:3},
+      {w:`probability`,p:`n.`,m:`확률`,s:3},
+      {w:`overestimate`,p:`v.`,m:`과대평가하다`,s:3},
+      {w:`odds`,p:`n.`,m:`확률, 가능성`,s:2},
+      {w:`likelihood`,p:`n.`,m:`가능성, 있음직함`,s:2},
+      {w:`factor into`,p:`phr.`,m:`~에 반영되다, ~을 고려하다`,s:3},
+      {w:`low-probability`,p:`adj.`,m:`낮은 확률의`,s:2},
+      {w:`optimistic`,p:`adj.`,m:`낙관적인`,s:2},
+      {w:`on the order of`,p:`phr.`,m:`약 ~의 규모로`,s:2}
+    ],
+    structs:[
+      {p:`tend to V`,m:`~하는 경향이 있다`},
+      {p:`more than S+V`,m:`S가 V하는 것보다 더`}
+    ],
+    grammar:[
+      {n:`tend to V — 경향 표현`,d:`'tend to' + 동사원형으로 '~하는 경향이 있다'. 요지 문제의 핵심 주장에 자주 등장하는 표현.`,ex:`Low-probability events tend to factor more into decisions than they should`},
+      {n:`the + 비교급, the + 비교급`,d:`'the smaller the probability, the more we overestimate' — '~할수록 더 ~하다' 비례 구조.`,ex:`the smaller the probability, the more we overestimate its likelihood`},
+      {n:`When + S + V — 시간 부사절`,d:`When we make decisions에서 시간 부사절이 문두에 위치. '~할 때'의 의미.`,ex:`When we make decisions, do we treat a one-percent chance like one percent?`},
+      {n:`that is — 재진술 연결표현`,d:`앞 문장을 구체적으로 다시 설명하는 연결 표현. '즉, 다시 말해'의 의미.`,ex:`That is, an event that has an objective one-percent chance could seem like five percent`}
+    ],
+    tips:[
+      `"more than they should" = 과대평가를 직접 서술하는 핵심 표현 — 정답 ②의 직접 근거`,
+      `로또 예시는 주제를 뒷받침하는 구체적 사례일 뿐 — 로또 자체가 주제가 아님에 주의`,
+      `요지 문제에서 반복되는 어휘 확인: overestimate / low-probability / more than they should`
+    ]
+  },
+  {
+    id:`q23`,num:23,type:`주제`,tc:`reading`,pts:``,
+    topic:`공통 화폐 시스템은 거래비용을 제거해 경제 전체에 이익을 준다`,
+    ks:`<em class="hly">So a common currency provides for a strong economic foundation that all can benefit from.</em>`,
+    ksko:`따라서 공통 화폐는 모두가 이익을 얻을 수 있는 강력한 경제적 기반을 제공한다.`,
+    ans:`③`,anstxt:`economic advantages of a common currency system`,
+    rat:[
+      `공통 화폐 도입 시 환전·헤지 등의 거래비용이 사라지고, 절약된 비용이 생산성과 혁신에 재투자된다.`,
+      `"useless costs turn into productive costs"는 공통 화폐의 경제적 효과를 압축해 표현한 핵심 문장이다.`,
+      `지문 전체가 공통 화폐의 이점(barriers 제거 → 비용 절감 → 재투자 → 경제 성장)을 일관되게 논증한다.`
+    ],
+    wrong:`①다국적 기업 마케팅 전략 — 전혀 무관 / ②금융시장 갈등 — 반대 방향 / ④현금 거래 규제 — 언급 없음 / ⑤투자 위험 감수 이유 — 관련 없음`,
+    vocab:[
+      {w:`transaction`,p:`n.`,m:`거래`,s:3},
+      {w:`currency`,p:`n.`,m:`화폐, 통화`,s:3},
+      {w:`hedge`,p:`v.`,m:`헤지 거래를 하다`,s:2},
+      {w:`reinvest`,p:`v.`,m:`재투자하다`,s:2},
+      {w:`competitive`,p:`adj.`,m:`경쟁력 있는`,s:2},
+      {w:`barrier`,p:`n.`,m:`장벽`,s:2},
+      {w:`convert`,p:`v.`,m:`전환하다, 환전하다`,s:2},
+      {w:`productivity`,p:`n.`,m:`생산성`,s:3},
+      {w:`innovation`,p:`n.`,m:`혁신`,s:3},
+      {w:`foundation`,p:`n.`,m:`토대, 기반`,s:2},
+      {w:`turn into`,p:`phr.`,m:`~으로 바뀌다`,s:2},
+      {w:`benefit from`,p:`phr.`,m:`~으로부터 이익을 얻다`,s:2},
+      {w:`provide for`,p:`phr.`,m:`~을 제공하다, 마련하다`,s:2}
+    ],
+    structs:[
+      {p:`not only A but also B`,m:`A뿐만 아니라 B도`},
+      {p:`means that S+V`,m:`~을 의미한다`},
+      {p:`not because of A but because of B`,m:`A 때문이 아니라 B 때문에`}
+    ],
+    grammar:[
+      {n:`비교급 강조 — more than S would`,d:`'grow more than they would as independents' — would는 가정법 과거로 '독립적이라면 그랬을 것보다 더'의 의미.`,ex:`benefit and grow more than they would as independents`},
+      {n:`Having + 명사구 — 동명사구 주어`,d:`Having a common currency means that...에서 Having a common currency 전체가 문장의 주어 역할을 하는 동명사구.`,ex:`Having a common currency means that many transaction costs disappear`},
+      {n:`By + -ing — 수단 표현`,d:`By unifying some of the currencies는 '~함으로써'의 수단을 나타내는 전치사구.`,ex:`By unifying some of the currencies, whole economies benefit and grow`}
+    ],
+    tips:[
+      `"common currency"가 지문 전체에서 반복되는 핵심 키워드 — 주제어 파악`,
+      `마지막 문장이 주제를 최종 정리함 — 주제 문제에서 결론 문장 중요`,
+      `오답 ①②④⑤는 모두 지문에서 다루지 않는 소재 — 소거법 활용`
+    ]
+  },
+  {
+    id:`q24`,num:24,type:`제목`,tc:`reading`,pts:``,
+    topic:`별빛은 우주의 역사를 들여다볼 수 있는 타임머신이다`,
+    ks:`This means we have a chance of understanding the <em class="hly">history of the universe</em> because we can see the more distant parts of it <em class="hly">as they were in the past</em>, thousands or millions or billions of years ago.`,
+    ksko:`이는 우리가 더 먼 부분들을 수천 년 혹은 수백만 년 혹은 수십억 년 전 과거에 있었던 모습 그대로 볼 수 있기 때문에 우주의 역사를 이해할 기회가 있음을 의미한다.`,
+    ans:`④`,anstxt:`Starlight as a Window into the History of the Universe`,
+    rat:[
+      `가장 가까운 별의 빛도 지구에 도달하는 데 4년이 걸리며, 오리온자리 별들의 빛은 1000년 이상 걸린다. 즉, 별을 본다는 것은 과거를 보는 것이다.`,
+      `멀리 볼수록 더 오랜 과거의 우주 모습을 보는 것이므로, 별빛은 우주의 역사를 이해하는 창(window)이다.`,
+      `"looking back in time"과 "understanding the history of the universe"가 글 전체 핵심 개념을 요약한다.`
+    ],
+    wrong:`①상상력으로 우주 이해 — 지문에 상상력 없음 / ②별이 타는 데 걸리는 시간 — 전혀 무관 / ③외계 생명체 탐색 — 무관 / ⑤별이 움직이는 것처럼 보이는 이유 — 무관`,
+    vocab:[
+      {w:`stellar`,p:`adj.`,m:`별의`,s:2},
+      {w:`constellation`,p:`n.`,m:`별자리`,s:2},
+      {w:`incredible`,p:`adj.`,m:`믿을 수 없는, 놀라운`,s:2},
+      {w:`reddish`,p:`adj.`,m:`불그스름한`,s:1},
+      {w:`familiar`,p:`adj.`,m:`익숙한`,s:2},
+      {w:`distant`,p:`adj.`,m:`먼, 멀리 떨어진`,s:2},
+      {w:`reach`,p:`v.`,m:`도달하다`,s:2},
+      {w:`look back in time`,p:`phr.`,m:`시간을 거슬러 보다`,s:3},
+      {w:`glow`,p:`n./v.`,m:`빛; 빛나다`,s:2},
+      {w:`wind time back`,p:`phr.`,m:`시간을 되감다`,s:3}
+    ],
+    structs:[
+      {p:`as they were in the past`,m:`과거에 있었던 모습 그대로`},
+      {p:`take ~ years to V`,m:`~하는 데 ~년이 걸리다`},
+      {p:`the further ~ the further`,m:`더 멀수록 더 멀리 (이중 비교)`},
+      {p:`This means (that) S+V`,m:`이것은 ~을 의미한다`}
+    ],
+    grammar:[
+      {n:`관계사절 수식`,d:`which glows in the Orion constellation — Betelgeuse를 수식하는 관계사절. 선행사 파악 중요.`,ex:`the bright star Betelgeuse, which glows in the Orion constellation`},
+      {n:`as they were (동사 생략)`,d:`'as they were in the past' — as가 '~했던 것처럼/그대로'의 의미. the way 대체 가능.`,ex:`see the more distant parts of it as they were in the past`},
+      {n:`현재진행형의 함축적 의미`,d:`we are looking back in time은 별을 보는 행위가 동시에 과거를 보는 행위임을 강조하는 현재진행형.`,ex:`When we look at the stars, we are looking back in time`},
+      {n:`현재완료 — 과거~현재 연속`,d:`has travelled는 과거에 출발한 별빛이 현재까지 계속 이동해 왔음을 나타냄.`,ex:`Their light has travelled at least 1,000 years to reach us`}
+    ],
+    tips:[
+      `"When we look at the stars, we are looking back in time" — 글 전체 핵심 명제`,
+      `제목은 글 전체를 포괄해야 함 — 'starlight'와 'history'가 모두 들어간 ④ 선택`,
+      `Betelgeuse(600년), Orion's belt(1000년+) 예시는 핵심 논지의 구체적 근거`
+    ]
+  },
+  {
+    id:`q29`,num:29,type:`어법`,tc:`lang`,pts:`[3점]`,
+    topic:`현대인은 할인 쿠폰과 같은 기계적 행동 패턴에 의존함으로써 금전적 절약뿐 아니라 정신적 에너지 절감이라는 이점도 얻는다`,
+    ks:`In today's world, we need the first advantage to handle <em class="hly">pocketbook strain</em>; but we need the second advantage to handle something potentially more important ― <em class="hly">brain strain</em>.`,
+    ksko:`오늘날 세계에서, 우리는 지갑의 부담을 처리하기 위해 첫 번째 장점(금전적 절약)이 필요하지만, 잠재적으로 더 중요한 것인 뇌의 부담을 처리하기 위해 두 번째 장점(정신적 에너지 절감)도 필요하다.`,
+    ans:`②`,anstxt:`producing → produced (주어의 주동사 자리에 현재분사 불가)`,
+    rat:[
+      `② producing은 현재분사로 주동사(main verb) 역할을 할 수 없다. 주어 "Mailed-out coupons"의 술어 동사가 필요한 자리이므로 과거시제 동사 produced가 되어야 한다.`,
+      `① offered는 주격관계대명사절(that) 안의 술어 동사 — 올바름. ③ that은 주격보어절을 이끄는 접속사 — 올바름.`,
+      `④ do we expect는 Not only가 문두에 와서 조동사 do가 주어 앞으로 도치된 것 — 올바름. ⑤ potentially는 more important를 수식하는 부사 — 올바름.`
+    ],
+    wrong:`①③④⑤ 모두 문법적으로 정확한 이유를 함께 이해해야 ② 선택 가능`,
+    vocab:[
+      {w:`renowned`,p:`adj.`,m:`유명한`,s:2},
+      {w:`assert`,p:`v.`,m:`주장하다, 단언하다`,s:2},
+      {w:`mechanically`,p:`adv.`,m:`기계적으로`,s:2},
+      {w:`recipient`,p:`n.`,m:`수령자`,s:2},
+      {w:`substantial`,p:`adj.`,m:`상당한`,s:2},
+      {w:`instructive`,p:`adj.`,m:`교훈적인`,s:2},
+      {w:`civilization`,p:`n.`,m:`문명`,s:2},
+      {w:`assumption`,p:`n.`,m:`가정`,s:2},
+      {w:`double duty`,p:`n.`,m:`두 가지 역할`,s:3},
+      {w:`brain strain`,p:`n.`,m:`정신적 부담`,s:3}
+    ],
+    structs:[
+      {p:`Not only + 조동사 + 주어 + V`,m:`부정 부사구 문두 → 도치 구문`},
+      {p:`to the extent to which ~`,m:`~의 정도로 (관계사 which 주목)`},
+      {p:`save us the time to V`,m:`~할 시간을 절약해 주다`},
+      {p:`be required to V`,m:`~할 필요가 있다`}
+    ],
+    grammar:[
+      {n:`부정 부사구 도치 — Not only`,d:`"Not only do we expect them to save us money"에서 Not only가 문두에 오면 주어·조동사가 도치됨. do+주어 어순에 주의.`,ex:`Not only do we expect them to save us money, we also expect them to...`},
+      {n:`분사 vs. 정동사 구별`,d:`현재분사(producing)는 형용사적·부사적 역할만 가능. 주어의 주동사가 필요한 자리에는 반드시 정동사(produced) 사용.`,ex:`coupons produced just as much response (정답) vs. coupons producing... (오류)`},
+      {n:`관계대명사 which — 보충 설명`,d:`which allows consumers to assume...에서 which가 앞의 discount coupon을 선행사로 받아 부가 설명.`,ex:`the discount coupon, which allows consumers to assume they will receive a reduced price`}
+    ],
+    tips:[
+      `② producing → produced: 주어(coupons)에 대한 주동사 자리 — 분사 불가`,
+      `나머지 ①③④⑤의 문법적 근거도 함께 학습해야 혼동 방지 가능`,
+      `Not only 도치 공식: Not only + 조동사 + 주어 + 동사원형 암기 필수`
+    ]
+  },
+  {
+    id:`q30`,num:30,type:`어휘`,tc:`lang`,pts:``,
+    topic:`혁신적 고가 제품은 가격 탄력성이 낮고 초기 구매자는 가격보다 성능을 중시한다`,
+    ks:`<em class="hly">Usually, innovative high-tech products have low price elasticity.</em>`,
+    ksko:`보통, 혁신적인 첨단 기술 제품들은 낮은 가격 탄력성을 가진다.`,
+    ans:`③`,anstxt:`more sensitive → less sensitive (초기 구매자는 가격보다 성능 중시)`,
+    rat:[
+      `deep pockets(재력 있는)를 가진 초기 구매자들은 혁신적·탁월한 제품에 많은 돈을 기꺼이 지불한다고 명시되어 있다.`,
+      `따라서 이들은 가격에 "더 민감한(more sensitive)"것이 아니라 "덜 민감한(less sensitive)"것이 문맥에 맞다.`,
+      `경쟁사들도 같은 고객층을 노리므로 가격을 낮추지 않는다는 뒷받침 내용도 ③의 less sensitive를 확인해 준다.`
+    ],
+    wrong:`①demand(수요 변화 않음 — 맞음) / ②high(전환 비용 높음 — 맞음) / ④lowering(경쟁사도 가격 낮추지 않음 — 맞음) / ⑤reinforces(고가=품질 신호 강화 — 맞음)`,
+    vocab:[
+      {w:`elasticity`,p:`n.`,m:`탄력성`,s:3},
+      {w:`substitute`,p:`n.`,m:`대체품`,s:2},
+      {w:`innovator`,p:`n.`,m:`혁신가`,s:2},
+      {w:`forerunner`,p:`n.`,m:`선구자, 선두주자`,s:2},
+      {w:`perceive`,p:`v.`,m:`인식하다`,s:2},
+      {w:`whatsoever`,p:`adv.`,m:`조금도 (~않다)`,s:2},
+      {w:`innovative`,p:`adj.`,m:`혁신적인`,s:3},
+      {w:`variation`,p:`n.`,m:`변화, 변동`,s:2},
+      {w:`modify`,p:`v.`,m:`변화시키다`,s:2},
+      {w:`demand`,p:`n.`,m:`수요`,s:3},
+      {w:`manufacturer`,p:`n.`,m:`제조업체`,s:2},
+      {w:`reinforce`,p:`v.`,m:`강화하다`,s:2}
+    ],
+    structs:[
+      {p:`be ready to V`,m:`~할 준비가 되어 있다`},
+      {p:`be perceived as N`,m:`~으로 인식되다`},
+      {p:`This means that S+V`,m:`이것은 ~을 의미한다`}
+    ],
+    grammar:[
+      {n:`비교급 문맥 파악 — more vs. less`,d:`어휘 문제에서 비교급의 방향(more/less)은 주변 문맥에서 결정. 초기 구매자의 특성(재력, 지불 의향)을 파악해야 less가 맞음.`,ex:`buyers are [less] sensitive to price than to additional performance`},
+      {n:`분사구문 meaning that — 부연 설명`,d:`meaning that the costs to switch to another product are high에서 meaning that이 앞 문장 전체를 보충 설명하는 분사구문.`,ex:`have few substitutes, meaning that the costs to switch are high`},
+      {n:`관계대명사 who — 사람 선행사 수식`,d:`customers who are ready to accept the price range에서 who가 customers를 수식.`,ex:`customers who are ready to accept the price range the manufacturer has set`},
+      {n:`형용사구 후치수식`,d:`customers, not sensitive to price에서 'not sensitive to price'가 customers를 보충 설명.`,ex:`chasing the same categories of customers, not sensitive to price`}
+    ],
+    tips:[
+      `초기 구매자(innovators/forerunners) = 가격 둔감, 성능 중시 → ③ more를 less로 수정`,
+      `"deep pockets" 또는 "ready to spend a lot" = 가격에 덜 민감함의 직접 근거`,
+      `고가 = 품질의 신호(sign of quality)라는 문맥도 ③ 수정을 뒷받침`
+    ]
+  },
+  {
+    id:`q31`,num:31,type:`빈칸`,tc:`blank`,pts:``,
+    topic:`도시 인프라는 시대에 따라 변화하는 다양한 용도를 지원할 수 있다`,
+    ks:`<em class="hly">One easily underappreciated feature of a city street or square is its 'future-proof' nature.</em>`,
+    ksko:`도시의 거리나 광장이 가진 쉽게 과소평가되는 특징 하나는 그것의 '미래에도 견디는' 성격이다.`,
+    ans:`①`,anstxt:`evolving uses (변화하는 용도들)`,
+    rat:[
+      `마라케시·시에나의 중세 광장이 500년 후에도 여전히 물건이 판매되는 곳으로 사용된다는 예시가 "future-proof" 개념을 제시한다.`,
+      `마차 채찍과 타자기를 팔던 상점이 이제 휴대폰 수리점이나 버블티 카페가 된 예시가 빈칸 직전에 제시되어 "변화하는 용도"를 직접 암시한다.`,
+      `Jane Jacobs가 말한 "ability to support change in uses"가 빈칸의 정답(evolving uses)과 정확히 대응한다.`
+    ],
+    wrong:`②social connections — 사회적 연결은 언급 없음 / ③limited functions — 제한적 기능은 오히려 반대 의미 / ④architectural innovation — 건축 혁신이 주제가 아님 / ⑤collaborative work — 협업은 무관`,
+    vocab:[
+      {w:`infrastructure`,p:`n.`,m:`기반 시설`,s:3},
+      {w:`future-proof`,p:`adj.`,m:`미래에도 쓸모 있는`,s:2},
+      {w:`persistence`,p:`n.`,m:`지속성, 끈기`,s:2},
+      {w:`prophet`,p:`n.`,m:`예언자`,s:2},
+      {w:`buggy`,p:`n.`,m:`마차`,s:1},
+      {w:`evolving`,p:`adj.`,m:`진화하는, 변화하는`,s:2},
+      {w:`underappreciated`,p:`adj.`,m:`제대로 평가받지 못한`,s:2},
+      {w:`feature`,p:`n.`,m:`특징`,s:2},
+      {w:`medieval`,p:`adj.`,m:`중세의`,s:2},
+      {w:`architecture`,p:`n.`,m:`건축, 구조`,s:2},
+      {w:`unlike`,p:`prep.`,m:`~와 달리`,s:2},
+      {w:`make much of`,p:`phr.`,m:`~을 중요시하다`,s:2}
+    ],
+    structs:[
+      {p:`as is N`,m:`N도 마찬가지다 (비교·생략 구문)`},
+      {p:`unlike those who V`,m:`~하는 사람들과 달리`},
+      {p:`even if S+V`,m:`비록 ~일지라도`},
+      {p:`the same N that once V might now V`,m:`한때 ~했던 같은 N이 이제는 ~할 수 있다`}
+    ],
+    grammar:[
+      {n:`as is N — 비교 생략`,d:`"as is the shopping street" = "as the shopping street is (future-proof)". 앞 내용의 반복을 생략한 구조.`,ex:`as is the shopping street, even in an age of online shopping`},
+      {n:`관계대명사 that — 동일 선행사 수식`,d:`the same physical store that once sold buggy whips에서 that이 store를 수식. the same과 함께 쓰여 동일성을 강조.`,ex:`the same physical store that once sold buggy whips might now repair damaged phones`},
+      {n:`to부정사 형용사적 용법 — ability to V`,d:`its ability to support change in uses에서 to support가 ability를 수식. '~할 능력' 패턴.`,ex:`the great advantage of a city architecture is its ability to support change in uses`}
+    ],
+    tips:[
+      `빈칸 바로 앞 예시(buggy whips → bubble tea)가 정답 단서: 용도가 바뀌어도 인프라는 동일`,
+      `Jane Jacobs 인용 "ability to support change in uses" = evolving uses 직접 대응`,
+      `②③④⑤ 모두 지문 내용과 연결 근거가 없음 — 소거법 유효`
+    ]
+  },
+  {
+    id:`q32`,num:32,type:`빈칸`,tc:`blank`,pts:``,
+    topic:`식물은 접촉 자극에 반응하여 성장을 억제한다`,
+    ks:`touch quietly triggered such a dramatic response in their hormones and gene expression that it could substantially <em class="hly">② inhibit their growth</em>.`,
+    ksko:`접촉은 그들의 호르몬과 유전자 발현에 극적인 반응을 조용히 촉발하여 그것이 그들의 성장을 상당히 억제할 수 있었다.`,
+    ans:`②`,anstxt:`inhibit their growth (성장을 억제하다)`,
+    rat:[
+      `식물이 부드러운 붓으로 쓰다듬어진 후 30분 이내에 전체 게놈의 10%가 변화하였다.`,
+      `식물은 혼란에 대처하기 위해 우선순위를 재조정하고, 위쪽으로 자라는 작업에서 에너지를 다른 곳으로 전환하였다.`,
+      `여러 번 접촉된 arabidopsis는 위쪽 성장률을 최대 30%까지 줄였다 — 이것이 빈칸 정답의 직접 근거.`
+    ],
+    wrong:`①lifespan(수명) — 지문에 없음 / ③reproduction rate(번식률) — 언급 없음 / ④defense capability(방어 능력) — 무관 / ⑤maximum height 증가 — 반대 내용`,
+    vocab:[
+      {w:`genomics`,p:`n.`,m:`유전체학`,s:2},
+      {w:`genome`,p:`n.`,m:`게놈, 유전체`,s:2},
+      {w:`trigger`,p:`v.`,m:`촉발하다`,s:3},
+      {w:`substantially`,p:`adv.`,m:`상당히`,s:2},
+      {w:`reroute`,p:`v.`,m:`경로를 바꾸다`,s:2},
+      {w:`inhibit`,p:`v.`,m:`억제하다`,s:3},
+      {w:`impactful`,p:`adj.`,m:`영향력 있는`,s:2},
+      {w:`peer at`,p:`v.`,m:`자세히 들여다보다`,s:2},
+      {w:`dramatic`,p:`adj.`,m:`극적인`,s:2},
+      {w:`hormone`,p:`n.`,m:`호르몬`,s:2},
+      {w:`gene expression`,p:`n.`,m:`유전자 발현`,s:3},
+      {w:`alter`,p:`v.`,m:`바꾸다, 변화시키다`,s:2}
+    ],
+    structs:[
+      {p:`such ~ that S+V`,m:`너무 ~해서 S가 V하다 (결과절)`},
+      {p:`make it possible to V`,m:`~하는 것을 가능하게 하다 (가목적어 it)`},
+      {p:`within + 시간 + of being p.p.`,m:`~된 지 … 안에`}
+    ],
+    grammar:[
+      {n:`such ~ that 결과절`,d:`"triggered such a dramatic response ~ that it could substantially ___" — such ~ that 구문으로 원인·결과 관계 표현.`,ex:`triggered such a dramatic response that it could substantially inhibit their growth`},
+      {n:`분사구문 — Touched`,d:`"Touched multiple times, arabidopsis cut its upward growth rate" — 주어 arabidopsis가 접촉 당하는 수동 분사구문.`,ex:`Touched multiple times, arabidopsis cut its upward growth rate by as much as 30 percent`},
+      {n:`make + 가목적어 it + 형용사/to V`,d:`made it possible to see에서 it은 가목적어, to see가 진목적어. 'S+V+it+형용사+to V' 구조.`,ex:`The genomics revolution made it possible to see just how impactful touch is`},
+      {n:`명사절 that — saw that`,d:`researchers saw that touch triggered a dramatic response — that절이 saw의 목적절.`,ex:`researchers saw that touch quietly triggered such a dramatic response`},
+      {n:`being p.p. — 수동 동명사`,d:`within thirty minutes of being touched에서 touch를 '받은' 수동의 의미를 동명사로 표현.`,ex:`Within thirty minutes of being touched, 10 percent of the plant's genome was altered`}
+    ],
+    tips:[
+      `빈칸 이후 문장들("rerouting energy away from getting taller", "cut growth rate by 30%")이 정답 ② 근거`,
+      `키워드: rerouting energy away from getting taller = 성장 억제 = inhibit growth`,
+      `①③④⑤에 해당하는 내용은 지문 어디에도 등장하지 않음`
+    ]
+  },
+  {
+    id:`q33`,num:33,type:`빈칸`,tc:`blank`,pts:`[3점]`,
+    topic:`진화는 멈추지 않고 변화하는 환경을 지속적으로 추적한다`,
+    ks:`As a consequence, evolution normally does not come to a halt, but <em class="hly">constantly tracks the changing environment</em>.`,
+    ksko:`그 결과, 진화는 보통 멈추는 것이 아니라 변화하는 환경을 끊임없이 따라간다.`,
+    ans:`②`,anstxt:`constantly tracks the changing environment`,
+    rat:[
+      `평균 기온이 지속적으로 내려가면 세대를 거치며 더 긴 털 방향으로 선택 압력이 작용하고, 반대로 기온이 오르면 짧은 털 방향으로 선택 압력이 바뀐다.`,
+      `이 예시는 진화가 환경 변화의 방향에 따라 끊임없이 적응 방향을 바꾼다는 것을 보여준다.`,
+      `"does not come to a halt, but ___"의 구조에서 빈칸은 멈추지 않고 하는 행동이며, 뒤의 온도-털 예시 전체가 직접 근거.`
+    ],
+    wrong:`①occurs regardless of local temperature — 오히려 온도에 따라 달라짐 / ③brings nature into balance — 균형이 아닌 추적이 핵심 / ④makes species compete — 경쟁이 아닌 환경 추적 / ⑤threatens survival of hairy animals — 반대 방향`,
+    vocab:[
+      {w:`standstill`,p:`n.`,m:`정지, 교착 상태`,s:2},
+      {w:`prevailing`,p:`adj.`,m:`지배적인, 우세한`,s:2},
+      {w:`successive`,p:`adj.`,m:`연속적인`,s:2},
+      {w:`propel`,p:`v.`,m:`추진하다, 몰아가다`,s:3},
+      {w:`halt`,p:`n.`,m:`멈춤, 정지`,s:2},
+      {w:`drift`,p:`n.`,m:`점진적 이동, 서서히 흐름`,s:2},
+      {w:`onset`,p:`n.`,m:`시작, 개시`,s:2},
+      {w:`timescale`,p:`n.`,m:`시간 규모`,s:2},
+      {w:`consequence`,p:`n.`,m:`결과`,s:2},
+      {w:`persist`,p:`v.`,m:`지속되다`,s:2},
+      {w:`selection pressure`,p:`n.`,m:`선택압`,s:3},
+      {w:`come to a standstill`,p:`phr.`,m:`정지 상태에 이르다`,s:2},
+      {w:`come under the influence of`,p:`phr.`,m:`~의 영향 하에 놓이다`,s:2},
+      {w:`as a consequence`,p:`phr.`,m:`결과적으로`,s:2}
+    ],
+    structs:[
+      {p:`as long as N`,m:`N만큼의 긴 (수식) / N하는 동안 (접속사)`}
+    ],
+    grammar:[
+      {n:`조건접속사 If — 대칭 반복 패턴`,d:`If temperature drifts down → longer hair; If trend reverses → shorter hair — 두 If절이 대칭 구조로 정답 ②를 뒷받침.`,ex:`If there is a steady downward drift → longer coats; If the trend reverses → shorter coats`},
+      {n:`until + S + V — 조건적 시간표현`,d:`Evolution will come to a standstill until something changes — until은 '~할 때까지'로 조건적 시간의 기준점을 나타냄.`,ex:`Evolution will come to a standstill until something in the conditions changes`},
+      {n:`수동태 — will be propelled / will be pushed`,d:`successive generations will be propelled by a steady selection pressure — 선택압에 의해 '밀려가는' 수동 의미.`,ex:`successive generations will be propelled by a steady selection pressure`}
+    ],
+    tips:[
+      `빈칸 뒤 온도 하강 → 긴 털 / 온도 상승 → 짧은 털 예시 전체가 정답 단서`,
+      `"constantly tracks" = 환경에 맞춰 계속 추적·변화 = 핵심 개념`,
+      `come to a standstill vs. come to a halt 동의 표현 — 둘 다 멈추다`
+    ]
+  },
+  {
+    id:`q35`,num:35,type:`무관 문장`,tc:`struct`,pts:``,
+    topic:`예술 작품을 이해하기 위해서는 맥락·배경 정보의 수집과 활용이 필요하다`,
+    ks:`The process we go through when we look at a work of art to determine if we recognize and can make sense of its content is <em class="hly">not just a visual one</em>. It is <em class="hly">a mental process as well</em>, largely based on the elements within and about the work we can identify and categorize.`,
+    ksko:`우리가 예술 작품을 볼 때 그 내용을 인식하고 이해할 수 있는지 판단하기 위해 거치는 과정은 단순히 시각적인 것만이 아니다. 그것은 정신적인 과정이기도 하며, 주로 우리가 식별하고 분류할 수 있는 작품 내부와 주변의 요소들을 기반으로 한다.`,
+    ans:`③`,anstxt:`③ 배경·맥락 없이 이해하라 → 전체 흐름(맥락 활용)에 반함`,
+    rat:[
+      `지문 전체는 예술 작품을 이해할 때 맥락 정보(장소, 시기, 문화, 창작자, 제작 이유)가 도움이 된다고 일관되게 주장한다.`,
+      `③은 "배경·창작자·역사적 맥락의 영향을 받지 말고 있는 그대로 이해해야 한다"고 주장하여 전체 흐름과 정반대이다.`,
+      `①②④⑤는 모두 맥락 정보를 수집하고 활용하여 예술을 해석하는 방향을 공유한다.`
+    ],
+    wrong:`①시각적+정신적 과정 — 흐름에 맞음 / ②맥락 단서 활용 — 흐름에 맞음 / ④정보 수집이 맥락 이해에 도움 — 흐름에 맞음 / ⑤수집한 맥락 정보로 작품 해석 — 흐름에 맞음`,
+    vocab:[
+      {w:`determine`,p:`v.`,m:`결정하다, 판단하다`,s:2},
+      {w:`categorize`,p:`v.`,m:`분류하다, 범주화하다`,s:2},
+      {w:`context`,p:`n.`,m:`맥락, 배경`,s:3},
+      {w:`symbolize`,p:`v.`,m:`상징하다`,s:2},
+      {w:`interpret`,p:`v.`,m:`해석하다`,s:3},
+      {w:`strive`,p:`v.`,m:`노력하다, 분투하다`,s:2},
+      {w:`recognize`,p:`v.`,m:`인식하다, 알아보다`,s:2},
+      {w:`make sense of`,p:`phr.`,m:`~을 이해하다`,s:3},
+      {w:`visual`,p:`adj.`,m:`시각적인`,s:2},
+      {w:`mental`,p:`adj.`,m:`정신적인`,s:2},
+      {w:`identify`,p:`v.`,m:`식별하다`,s:2},
+      {w:`clue`,p:`n.`,m:`단서`,s:3},
+      {w:`be given clues about`,p:`phr.`,m:`~에 대한 단서를 얻다`,s:2},
+      {w:`be based on`,p:`phr.`,m:`~에 기반하다`,s:2}
+    ],
+    structs:[
+      {p:`strive to V`,m:`~하려고 노력하다`},
+      {p:`not just A (but B as well)`,m:`단지 A만은 아닌 (B이기도 하다)`}
+    ],
+    grammar:[
+      {n:`관계사절 — for what reasons`,d:`"for what historical, social, personal, political, or scientific reasons the work of art was made" — 간접의문문 구조.`,ex:`understand the work's context, for what reasons the work was made`},
+      {n:`without -ing (부사구)`,d:`"without being influenced by the background" — 전치사 without + 동명사로 '~하지 않고'의 부사적 의미.`,ex:`understand a work of art as we see it, without being influenced by...`},
+      {n:`not just A ... as well — 범위 확장`,d:`not just a visual one / a mental process as well에서 'A뿐만 아니라 B도'의 의미로 범위를 확장.`,ex:`not just a visual one ... a mental process as well`},
+      {n:`간접의문문 병렬`,d:`where it is, when it was made, what culture it came from...이 by 뒤에 병렬로 연결된 간접의문문.`,ex:`where it is, when it was made, what culture it came from, who created it`},
+      {n:`관계부사 why`,d:`why it was made에서 why가 이유를 나타내는 명사절을 이끔.`,ex:`for what historical, social, personal, political, or scientific reasons the work of art was made`}
+    ],
+    tips:[
+      `무관 문장 = 글의 주제와 반대이거나 갑자기 다른 방향을 주장하는 문장`,
+      `"context"가 반복 핵심어 — ③만 context를 무시하라고 함`,
+      `③의 "without being influenced" = 맥락 배제 주장 → 전체 흐름(맥락 활용)과 충돌`
+    ]
+  },
+  {
+    id:`q37`,num:37,type:`글의 순서`,tc:`struct`,pts:``,
+    topic:`극심한 스트레스 상황에서 나타나는 동결 반응의 언어 억제 효과와 만성적 공포 상태의 정신 건강상 위험성`,
+    ks:`Because of this, the freeze response results in the <em class="hly">inhibition of language</em> in highly stressful and traumatic situations.`,
+    ksko:`이 때문에 동결 반응은 매우 스트레스가 크고 충격적인 상황에서 언어의 억제를 초래한다.`,
+    ans:`⑤`,anstxt:`(C) - (B) - (A)`,
+    rat:[
+      `주어진 글: 놀랐을 때 갑자기 멈추고, 동작을 얼리고, 숨을 참으며 위협을 살핀다.`,
+      `(C): "All these responses" — 이 반응들이 위험 탐지·전투/도주 준비를 극대화하며, 언어(소리)는 위치를 노출할 수 있다고 설명.`,
+      `(B): "Because of this" — (C)의 이유로 freeze 반응이 언어를 억제함. 위협이 지나가면 이완되어 다시 말할 수 있게 됨. (A): "But what if we can never relax?" — (B)의 이완 가능 결론에 역접. 이완 불가 시 만성 스트레스·정신 질환 발생.`
+    ],
+    wrong:`(A)가 먼저 오면 논리 선후관계 파괴 / (B)가 먼저 오면 "Because of this"의 지시 대상 없음`,
+    vocab:[
+      {w:`startle`,p:`v.`,m:`깜짝 놀라게 하다`,s:3},
+      {w:`inhibition`,p:`n.`,m:`억제`,s:3},
+      {w:`chronic`,p:`adj.`,m:`만성의`,s:2},
+      {w:`predator`,p:`n.`,m:`포식자`,s:3},
+      {w:`neural`,p:`adj.`,m:`신경의`,s:2},
+      {w:`integration`,p:`n.`,m:`통합`,s:2},
+      {w:`freeze`,p:`v.`,m:`얼어붙다, 멈추다`,s:3},
+      {w:`scan`,p:`v.`,m:`훑어보다, 살피다`,s:2},
+      {w:`detection`,p:`n.`,m:`발견, 탐지`,s:2},
+      {w:`traumatic`,p:`adj.`,m:`외상성의, 충격적인`,s:2},
+      {w:`natural selection`,p:`n.`,m:`자연선택`,s:2},
+      {w:`chronic stress`,p:`n.`,m:`만성 스트레스`,s:2},
+      {w:`result in`,p:`phr.`,m:`~을 초래하다`,s:3},
+      {w:`give away`,p:`phr.`,m:`~을 노출시키다, 드러내다`,s:2}
+    ],
+    structs:[
+      {p:`Think about a time when S+V`,m:`~했던 때를 생각해 보라`},
+      {p:`as sophisticated as S+V`,m:`비록 ~일지라도 (양보)`}
+    ],
+    grammar:[
+      {n:`What if S+V? — 가정 의문문`,d:`"What if our experiences shape our brain to be in a constant state of fear?" — '만약 ~하면 어떻게 될까?' 가정·우려 표현.`,ex:`But what if we can never relax? What if our experiences shape our brain...`},
+      {n:`As sophisticated as ~ — 양보 구문`,d:`"As sophisticated as language has become, it is still the creation of sound" — '비록 ~일지라도'의 양보 의미.`,ex:`As sophisticated as language has become, it is still the creation of sound that might give away our location`},
+      {n:`as + S + V — 동시 동작`,d:`as you scanned the environment에서 as는 '~하면서'의 동시 동작을 나타냄.`,ex:`hold your breath as you scanned the environment for a threat`}
+    ],
+    tips:[
+      `(C)의 "All these responses"가 주어진 글의 반응들(stop/freeze/hold breath)을 직접 받음 → (C) 선행`,
+      `(B)의 "Because of this"가 (C)의 설명(소리=위치 노출)을 원인으로 받음 → (B) 후행`,
+      `(A)의 "But what if we can never relax?"가 (B)의 "when the threat passes, we begin to relax"에 역접 → (A) 최후`
+    ]
+  },
+  {
+    id:`q38`,num:38,type:`문장 삽입`,tc:`struct`,pts:``,
+    topic:`폭력적 비디오 게임의 반복 노출이 둔감화를 통해 공감 능력을 저하시킨다`,
+    ks:`With repeated exposure to violent events, this normal reaction might become blunted, <em class="hly">a phenomenon known as desensitization</em>. [⑤] The next step in this problematic process would be having <em class="hly">diminished emotional responses to violence</em>, leading to <em class="hly">reduced empathy</em>.`,
+    ksko:`폭력적인 사건에 반복 노출되면 정상적 반응이 둔해지며 이를 둔감화라 한다. [⑤] 이 과정의 다음 단계는 폭력에 대한 감소된 감정 반응 → 공감 능력 저하이다.`,
+    ans:`⑤`,anstxt:`⑤번 위치 — desensitization 설명 직후, 최종 연구 결과 직전`,
+    rat:[
+      `⑤ 이전 문장: "this normal reaction might become blunted, a phenomenon known as desensitization" — 둔감화(desensitization) 개념이 처음 등장하며 '문제적 과정'이 확립됨.`,
+      `삽입 문장의 "The next step in this problematic process"에서 "this problematic process"는 바로 앞 문장의 desensitization 과정을 지시하고, 그 다음 단계(감소된 감정 반응 → 공감 능력 저하)를 설명함.`,
+      `⑤ 이후 문장: "A significant body of work shows an association between extensive violent video gaming and reduced empathy" — 삽입 문장에서 제시한 reduced empathy 메커니즘에 대한 연구 증거로 자연스럽게 마무리됨.`
+    ],
+    wrong:`①②③ 위치 — desensitization이 아직 등장하지 않아 "this problematic process"의 지시 대상이 없음 / ④ 위치 — 아직 desensitization 문장 이전이므로 마찬가지로 지시 대상 불명확`,
+    vocab:[
+      {w:`empathy`,p:`n.`,m:`공감 (능력)`,s:3},
+      {w:`credible`,p:`adj.`,m:`신뢰할 만한`,s:2},
+      {w:`desensitization`,p:`n.`,m:`둔감화`,s:3},
+      {w:`blunted`,p:`adj.`,m:`무뎌진`,s:2},
+      {w:`physiological`,p:`adj.`,m:`생리적인`,s:2},
+      {w:`diminished`,p:`adj.`,m:`감소된, 줄어든`,s:2},
+      {w:`longstanding`,p:`adj.`,m:`오래 지속된`,s:2},
+      {w:`violent`,p:`adj.`,m:`폭력적인`,s:3},
+      {w:`formulate`,p:`v.`,m:`공식화하다, 만들어 내다`,s:2},
+      {w:`arousal`,p:`n.`,m:`각성`,s:2},
+      {w:`repeated exposure`,p:`n.`,m:`반복 노출`,s:3},
+      {w:`association`,p:`n.`,m:`관련성, 연관`,s:2},
+      {w:`with regard to`,p:`phr.`,m:`~에 관하여`,s:3},
+      {w:`be associated with`,p:`phr.`,m:`~와 연관되다`,s:2},
+      {w:`a body of work`,p:`n.`,m:`일련의 연구, 작업물`,s:2},
+      {w:`interfere with`,p:`phr.`,m:`~을 방해하다, 저해하다`,s:3},
+      {w:`be known as`,p:`phr.`,m:`~로 알려져 있다`,s:2}
+    ],
+    structs:[
+      {p:`Part of N is to V`,m:`N의 일부는 ~하는 것이다`}
+    ],
+    grammar:[
+      {n:`관계사 which — 계속적 용법`,d:`"which could also interfere with..." — 앞 절 전체(diminished emotional responses)를 받아 결과를 추가 설명하는 계속적 용법.`,ex:`having diminished emotional responses, which could also interfere with...`},
+      {n:`leading to — 분사구문 (결과)`,d:`"leading to reduced empathy" — 결과를 나타내는 현재분사구문. '결과적으로 ~으로 이어지다'의 의미.`,ex:`interfere with the ability to sympathize, leading to reduced empathy`},
+      {n:`With + 명사구 — 상황/조건`,d:`With repeated exposure to violent events는 '~이 반복될 때/반복 노출로'의 조건·상황을 나타내는 전치사구.`,ex:`With repeated exposure to violent events, this normal reaction might become blunted`},
+      {n:`known as N — 후치 수식구`,d:`a phenomenon known as desensitization에서 known as가 phenomenon을 수식하는 과거분사구.`,ex:`a phenomenon known as desensitization`},
+      {n:`병렬 to부정사`,d:`to recognize and/or to sympathize with others에서 두 to부정사가 병렬 연결.`,ex:`interfere with the ability to recognize and/or to sympathize with others`}
+    ],
+    tips:[
+      `"this problematic process" = ⑤ 바로 앞 desensitization 문장을 지시 — desensitization이 등장한 직후인 ⑤가 정답`,
+      `"The next step" = 단계별 인과 흐름(반복 노출 → 둔감화 → 감정 반응 감소 → 공감 저하)의 중간 고리`,
+      `삽입 후 "A significant body of work shows … reduced empathy"가 삽입 문장의 결론을 연구 증거로 뒷받침하며 자연스럽게 마무리`
+    ]
+  },
+  {
+    id:`q40`,num:40,type:`요약`,tc:`summary`,pts:`[3점]`,
+    topic:`뇌는 예상 음악 패턴을 모델링하고, 그 패턴이 깨질 때 감동이 발생한다`,
+    ks:`Music communicates to us emotionally through <em class="hly">systematic violations of expectations</em>.`,
+    ksko:`음악은 기대의 체계적인 위반을 통해 우리에게 감정적으로 소통한다.`,
+    ans:`④`,anstxt:`(A) anticipated  /  (B) break`,
+    rat:[
+      `(A) anticipated: 뇌는 박자(pulse)와 멜로디에 대한 schema를 형성하여 언제 어떤 패턴이 올지 예상한다 — anticipated(예상된)가 적절.`,
+      `(B) break: 음악은 이 예상을 "체계적으로 위반(systematic violations)"할 때 감동을 준다 — break(어기다/깨다)가 적절.`,
+      `"violations of expectations"의 violations = break, "schema/expected patterns" = anticipated의 직접 대응.`
+    ],
+    wrong:`①unpredictable+repeat — unpredictable은 예상 불가지만 뇌가 모델링하는 것은 예상 가능한 패턴임 / ③anticipated+maintain — 유지하면 감동 없음, 지문과 정반대 / ⑤established+embody — embody(구현하다)는 break와 반대 방향`,
+    vocab:[
+      {w:`schema`,p:`n.`,m:`도식, 스키마`,s:3},
+      {w:`metrical`,p:`adj.`,m:`운율의, 박자의`,s:2},
+      {w:`violation`,p:`n.`,m:`위반`,s:3},
+      {w:`pulse`,p:`n.`,m:`박자, 맥박`,s:3},
+      {w:`conform to`,p:`phr.`,m:`~에 따르다, 순응하다`,s:2},
+      {w:`take liberties with`,p:`phr.`,m:`~을 마음대로 변형하다`,s:2},
+      {w:`mental representation`,p:`n.`,m:`정신적 표상`,s:3},
+      {w:`appreciate`,p:`v.`,m:`인식하고 감상하다`,s:2},
+      {w:`crucial`,p:`adj.`,m:`결정적으로 중요한`,s:3},
+      {w:`systematic`,p:`adj.`,m:`체계적인`,s:2},
+      {w:`expectation`,p:`n.`,m:`기대`,s:3},
+      {w:`robotic`,p:`adj.`,m:`기계적인`,s:2}
+    ],
+    structs:[
+      {p:`in order to V`,m:`~하기 위해`},
+      {p:`so that S+V`,m:`~하도록 (목적)`},
+      {p:`has to involve N`,m:`반드시 ~을 포함해야 한다`}
+    ],
+    grammar:[
+      {n:`so that / in order to — 목적`,d:`"in order to know when the musician is taking liberties" — in order to로 목적 표현. so that S+V로도 전환 가능.`,ex:`in order to know when the musician is taking liberties with it`},
+      {n:`occur they must — 강조 도치`,d:`"but occur they must" — 동사(occur)를 앞으로 도치하여 강조. '반드시 일어나야 한다'의 의미.`,ex:`but occur they must (= but they must occur)`},
+      {n:`Too much + 명사 — 문장 주어`,d:`Too much organization may technically still be music — 'too much+명사'가 문장 전체의 주어 역할.`,ex:`Too much organization may technically still be music, but it would be music that no one wants`}
+    ],
+    tips:[
+      `(A): schema = 뇌가 모델링하는 예상 패턴 → anticipated`,
+      `(B): systematic violations = 패턴을 어김 → break`,
+      `"emotionally flat and robotic" = 패턴만 있고 위반이 없는 음악 → break 없으면 감동 없음`
+    ]
+  }
+];
+
+
+const TRANS = {
+  q20: `우리는 때때로 전체가 각 부분만큼 좋을 것이라고 가정할 수 있다. 예를 들어, 당신이 스타트업을 책임지고 있고, 함께 일하는 모든 사람이 생산적이고 효율적이라는 것을 안다고 가정해 보자. 그 결과, 스타트업 역시 생산적이고 효율적일 것이라고 가정하는 것이 논리적으로 보일 수 있지만, 이것이 반드시 사실은 아니다. 합성의 오류는 서로 다른 "부분들"이 어떻게 상호작용하는지를 고려하지 못한다 — 예를 들어, 효율적인 행정관과 매우 유능한 IT 책임자가 각자 상대방이 시제품 테스트 결과를 대조 확인하는 담당이라고 가정한다면, 문제가 생긴다. 마찬가지로, 좋은 사람들로 구성된 팀이라도 여전히 실패가 예정된 프로젝트를 진행하고 있을 수 있고, 좋은 아이디어들로 구성된 프로젝트라도 안정적인 중심이 부족할 수 있다. 공통 목표를 가진 팀을 구성할 때는, 관련된 개인들뿐만 아니라 항상 전체적인 관점도 확인하라.`,
+  q21: `인간은 시각적 심상 능력이 뛰어나다. 우리의 뇌는 현실 세계에서 실제로 행동하는 위험이나 대가 없이 앞으로 할 행동을 예행 연습할 수 있는 세계의 내부 정신적 그림이나 모델을 만들어내는 이 능력을 진화시켰다. 심지어 하버드 대학교 심리학자 Steve Kosslyn의 뇌 영상 연구에서, 당신의 뇌가 실제로 장면을 볼 때와 마찬가지로 같은 영역을 사용하여 장면을 상상한다는 것을 보여주는 암시도 있다. 그러나 진화는 그러한 내부적으로 생성된 표상이 결코 실제만큼 진짜가 아니도록 만들어 놓았다. 이것은 당신의 유전자 편에서의 현명한 자제이다. 만약 당신의 세계 내부 모델이 완벽한 대체물이라면, 배가 고플 때마다 당신은 그저 연회에서 잔치를 즐기는 자신을 상상할 수 있을 것이다. 당신은 실제 음식을 찾을 동기가 없어 곧 굶어 죽게 될 것이다. 시인이 말했듯이, "당신은 배고픔의 허기진 끝을 잔치에 대한 단순한 상상으로 배부르게 할 수 없다."`,
+  q22: `1%에서 100%까지 각각의 객관적 확률에 대해, 우리는 주관적 확률 가중치를 알고 싶어 한다. 우리가 결정을 내릴 때, 1%의 가능성을 정확히 1%처럼 취급하는가, 아니면 다른 무언가처럼 취급하는가? 일어날 수 있지만 가능성이 낮은 사건들 — 낮은 확률의 사건들 — 은 약 25%까지의 확률로 정의될 수 있다. 낮은 확률의 사건들은 그래야 하는 것보다 더 많이 결정에 반영되는 경향이 있다. 즉, 객관적으로 1%의 발생 가능성이 있는 사건이 주관적으로는 5%의 가능성이 있는 것처럼 보일 수 있다. 우리는 이러한 낮은 확률의 사건들이 발생할 가능성을 과대평가한다. 일반적으로, 확률이 낮을수록 그 가능성을 더 많이 과대평가한다. 예를 들어, 복권을 하는 사람들은 종종 당첨에 대해 낙관적이다. 그러나 미국에서 가장 크고 인기 있는 복권에서 단 한 장의 티켓이 당첨될 확률은 1억 7500만분의 1 수준이다.`,
+  q23: `무역의 장벽들 중 많은 부분은 시장이나 고객의 부족 때문이 아니라, 제품을 경쟁력 있는 가격으로 시장에 출시하는 데 큰 장벽이 있기 때문에 존재한다. 거래 비용은 기업들에게 상당하다 — 단순한 교환 비용뿐만 아니라, 상품과 서비스에 대금을 지불하기 위해 자금을 환전하고, 지불하고, 헤지 거래를 하는 비용도 포함된다. 공통 화폐를 갖는다는 것은 그러한 거래 비용의 많은 부분이 사라지고, 그 절약분이 기업의 생산성과 혁신에 재투자될 수 있다는 것을 의미한다. 기본적으로, 쓸모없는 비용이 생산적인 비용으로 바뀐다 — 경제 전체에 장기적인 이익을 가져다주면서. 일부 화폐를 통일함으로써, 경제 전체가 독립적으로 운영될 때보다 더 많은 이익을 얻고 성장한다. 따라서 공통 화폐는 모두가 이익을 얻을 수 있는 강력한 경제적 기반을 제공한다.`,
+  q24: `우리에게 가장 가까운 별에서 오는 빛조차 우리에게 도달하는 데 4년이 걸린다. 우리가 별들을 바라볼 때, 우리는 시간을 거슬러 보는 것이다. 이것은 놀라운 선물이다. 우리는 우주의 일부를 수년 전의 모습 그대로 볼 수 있다. 우리가 더 멀리에서 빛을 수집할 수 있을수록, 우리는 시간을 더 멀리 거슬러 볼 수 있다. 오리온자리에서 빛나는 밝은 별 베텔게우스를 바라본다면, 당신은 600년 이상 시간을 되감는 것이다. 그 불그스름한 빛은 중세 시대에 지구를 향한 여정을 시작했다. 오리온자리의 허리띠에 있는 별들은 훨씬 더 멀리 있다. 수세대의 인간들에게 친숙한 그 빛은 우리에게 도달하기 위해 최소 1,000년을 여행했다. 이는 우리가 우주의 더 먼 부분들을 과거에 있었던 모습으로, 수천 년 혹은 수백만 년 혹은 수십억 년 전의 모습으로 볼 수 있기 때문에 우주의 역사를 이해할 기회가 있음을 의미한다.`,
+  q29: `저명한 영국 철학자 Alfred North Whitehead는 "문명은 생각하지 않고도 수행할 수 있는 작업의 수를 늘림으로써 발전한다"고 주장했다. 예를 들어, 할인 쿠폰이 문명에 가져다주는 "발전"을 생각해 보자. 할인 쿠폰은 소비자들이 쿠폰을 제시함으로써 구매 가격을 낮출 수 있다고 가정하게 해 준다. 우리가 그 가정에 기계적으로 작동하는 법을 배운 정도는 한 자동차 타이어 회사의 경험에서 잘 드러난다. 인쇄 오류 때문에 수령자에게 아무런 할인도 제공하지 않은 우편 발송 쿠폰이, 상당한 할인을 제공한 오류 없는 쿠폰만큼이나 많은 고객 반응을 만들어 냈다. 여기서 명백하지만 교훈적인 점은 우리가 할인 쿠폰이 이중적인 역할을 하기를 기대한다는 것이다. 우리는 쿠폰이 돈을 절약해 줄 뿐만 아니라, 어떻게 해야 하는지 생각하는 데 필요한 시간과 정신적 에너지도 절약해 주기를 기대한다. 오늘날 세계에서, 우리는 지갑의 부담을 처리하기 위해 첫 번째 장점이 필요하지만, 잠재적으로 더 중요한 것인 뇌의 부담을 처리하기 위해 두 번째 장점도 필요하다.`,
+  q30: `보통, 혁신적인 첨단 기술 제품들은 낮은 가격 탄력성을 가진다. 이는 가격의 큰 변화가 — 인상이든 인하든 — 수요를 크게 변화시키지 않는다는 것을 의미한다. 이러한 첨단 기술 제품들은 대체품이 거의 없어, 다른 제품으로 전환하는 비용이 높다. 또한, 기술의 초기 단계에서, 구매자들 — 혁신가나 선구자들 — 은 추가적인 성능보다 가격에 ③ 덜 민감하다. 그들은 종종 재력이 있거나 새롭고 혁신적이며 뛰어난 제품을 위해 많은 돈을 지불할 의향이 있다. 예를 들어, 새로운 제품 라인과 함께 고급 휴대폰 제조사는 250만 달러 이상의 자산을 가진 백만장자 가구의 3%를 목표로 하고 있다. 그들은 제조사가 설정한 가격대를 기꺼이 받아들일 고객들이다. 그 단계에서, 경쟁사들은 가격에 민감하지 않은 같은 고객층을 쫓고 있기 때문에, 자신들의 가격을 크게 낮추는 데 전혀 관심이 없다. 더욱이, 이러한 제품들의 높은 가격은 종종 품질의 표시로 인식되어 회사에 대한 고객의 신뢰를 강화한다.`,
+  q31: `도시의 거리나 광장이 가진 쉽게 과소평가되는 특징 하나는 그것의 '미래에도 견디는' 성격이다. Marrakesh와 Siena 같은 곳의 오래된 중세 광장들은 지난 500년 동안 판매되는 물건 자체는 바뀌었더라도 여전히 매일 물건이 팔리는 장소이다. 도시 광장은 상당히 미래 변화에 잘 견디는 기술이며, 온라인 쇼핑 시대에도 쇼핑 거리가 그러한 것과 같다. 예를 들어, 한때 마차 채찍과 타자기를 팔던 같은 물리적 가게가 이제는 손상된 휴대전화를 수리하고 버블티를 팔 수 있다. 같은 기반 시설이 [① 변화하는 용도]를 뒷받침하는 것이다. 도시 경제의 위대한 예언자인 Jane Jacobs는 『미국 대도시의 죽음과 삶』과 『경제의 본질』을 포함한 자신의 책들에서 이 사실을 매우 중시했다. 그녀가 지적했듯이, 도시 건축의 큰 장점은 용도 변화에 적응할 수 있는 능력이다. Jacobs는 인터넷의 부상이 도시의 죽음을 의미할 것이라고 예측한 사람들과 달리, 도시 자체의 지속성을 정확히 예측했다.`,
+  q32: `유전체학 혁명은 접촉이 더 깊은 차원에서 식물에게 얼마나 영향을 미치는지 볼 수 있게 해 주었다. 겨자 계열의 잡초 식물이자 식물 생물학계의 실험용 쥐인 애기장대(Arabidopsis thaliana)의 유전자를 들여다보며, 연구자들은 접촉이 호르몬과 유전자 발현에 극적인 반응을 조용히 촉발시켜서 그것이 성장을 상당히 ② 억제할 수 있음을 발견했다. 그들은 부드러운 붓으로 애기장대를 쓰다듬고 나서 식물의 유전적 반응을 분석했다. 접촉 후 30분 이내에, 식물 전체 게놈의 10%가 변화했다. 분명히, 식물은 혼란에 대처하기 위해 우선순위를 재조정하고, 더 높이 자라는 힘든 작업에서 에너지를 다른 곳으로 전환하고 있었다. 여러 번 접촉된 애기장대는 위쪽 성장률을 최대 30%까지 줄였다.`,
+  q33: `진화는 환경 조건에 어떤 변화가 생기기 전까지는 정지 상태에 이르게 될 것이다. 예를 들어 빙하기의 시작, 그 지역의 평균 강수량 변화, 또는 우세한 바람의 방향 변화와 같은 것이 있을 수 있다. 이러한 변화들은 우리가 진화적 시간 규모처럼 매우 긴 시간 단위를 다룰 때 실제로 일어난다. 그 결과, 진화는 보통 멈추는 것이 아니라 변화하는 환경을 끊임없이 따라간다. 만약 어떤 지역의 평균 기온이 꾸준히 낮아지는 경향이 있고, 그 경향이 수 세기 동안 지속된다면, 동물들의 연속된 세대는 예컨대 더 긴 털을 기르는 방향으로 지속적인 선택 '압력'에 의해 밀려가게 될 것이다. 낮아진 기온이 몇천 년 동안 지속된 후 그 추세가 반대로 바뀌어 평균 기온이 다시 서서히 올라간다면, 동물들은 새로운 선택 압력의 영향을 받게 되고, 다시 더 짧은 털을 기르는 방향으로 밀려가게 될 것이다.`,
+  q35: `우리가 예술 작품의 내용을 인식하고 이해할 수 있는지 판단하기 위해 작품을 볼 때 우리가 거치는 과정은 단순히 시각적인 것이 아니다. ① 그것은 또한 정신적인 과정이며, 주로 우리가 식별하고 분류할 수 있는 작품 내부와 주변의 요소들을 기반으로 한다. ② 우리가 보고 생각할 때, 작품이 어디에 있는지, 언제 만들어졌는지, 어떤 문화에서 나왔는지, 누가 만들었는지, 또는 왜 만들어졌는지에 의해 작품의 의미에 대한 단서를 얻을 수 있다. ③ 우리는 작품의 배경, 창작자 또는 역사적 맥락의 영향을 받지 않고 있는 그대로 예술 작품을 이해하려고 노력해야 한다. [← 무관 문장] ④ 우리가 수집할 수 있는 모든 정보는 작품의 맥락, 즉 어떤 역사적, 사회적, 개인적, 정치적, 또는 과학적 이유로 만들어졌는지를 이해하는 데 도움이 된다. ⑤ 그리고 나서, 우리가 수집한 모든 맥락적 정보를 활용하여, 예술 작품의 내용을 해석하여 그것이 무엇을 의미하거나 상징하는지 발견한다.`,
+  q37: `여러분이 깜짝 놀랐던 때를 생각해 보라. 여러분은 위협이 있는지 주변 환경을 살피면서 갑자기 멈추고, 모든 움직임을 멈춘 채 얼어붙고, 숨을 참았는가?
+
+(C) 이러한 모든 반응은 우리가 발각되는 것을 피하고, 가능한 위험의 근원을 찾아내며, 싸우거나 도망칠 준비를 하는 능력을 극대화한다. 언어가 아무리 정교해졌다고 해도, 언어는 여전히 소리를 만들어 내는 것이며, 그 소리는 잠재적인 포식자에게 우리의 위치를 드러낼 수도 있다.
+
+(B) 이 때문에 동결 반응은 매우 스트레스가 크고 충격적인 상황에서 언어의 억제를 초래한다. 자연 선택은 언어의 진화를 촉진했지만, 동결 규칙은 보존했다. 위협이 지나가면, 우리는 긴장을 풀기 시작하고 다시 목소리를 되찾으며, 어쩌면 우리 자신의 반응을 보고 웃기까지 할 수도 있다.
+
+(A) 하지만 우리가 결코 긴장을 풀 수 없다면 어떨까? 우리의 경험이 우리의 뇌를 끊임없는 공포 상태에 있도록 만든다면 어떨까? 신경망의 적절한 발달과 통합에 대한 이러한 방해는 만성 스트레스와 심지어 정신 질환을 초래할 수 있다.`,
+  q38: `비디오 게임은 공감과 관련하여 가장 많이 연구된 기술 중 하나이다. ( ① ) 폭력적인 비디오 게임이 청소년에게 미치는 영향에 대한 오래된 우려가 있었기 때문에, 지난 수십 년간 이 주제에 대해 많은 연구가 이루어졌다. ( ② ) 비디오 게임 폭력의 영향을 측정하고 기록하는 동안, 과학자들은 비디오 게임이 공감에 어떻게 영향을 미칠 수 있는지에 대한 신뢰할 만한 설명을 공식화했다. ( ③ ) 폭력적인 사건을 목격하는 것에 대한 정상적이고 건강한 반응의 일부는 부정적인 감정을 느끼고, 두려움이나 혐오감과 연결된 생리적 각성을 경험하는 것이다. ( ④ ) 폭력적인 사건에 반복적으로 노출되면 — 예를 들어 폭력적인 비디오 게임을 하는 사람에게 일어날 수 있는 것처럼 — 이 정상적인 반응이 둔해질 수 있으며, 이는 둔감화라는 현상으로 알려져 있다. ( ⑤ 정답 위치 ▼ ) 이 문제적 과정의 다음 단계는 폭력에 대해 감소된 감정적 반응을 갖는 것이 될 것이며, 이는 또한 타인을 인식하거나 그들에게 공감하는 능력을 방해할 수도 있어, 공감 능력 감소로 이어진다. [삽입 문장 끝] 광범위한 폭력적 비디오 게임과 사람들의 감소된 공감 능력 사이의 연관성을 보여주는 상당한 연구가 있다.`,
+  q40: `뇌는 일정한 박자의 모델 — 스키마 — 을 만들어야 하며, 그래야 우리는 음악가들이 그것을 따르지 않을 때를 알 수 있다. 이것은 멜로디의 변주와 비슷하다: 우리는 음악가가 멜로디를 자유롭게 변형하고 있을 때를 알고 감상하기 위해 멜로디가 무엇인지에 대한 심적 표상을 가질 필요가 있다. 운율 추출, 즉 박자가 무엇이고 언제 나타날 것으로 예상하는지 아는 것은 음악적 감동의 중요한 부분이다. 음악은 기대의 체계적인 위반을 통해 우리에게 감정적으로 소통한다. 이러한 위반들은 음높이, 리듬, 빠르기 등의 어떤 영역에서도 일어날 수 있다 — 하지만 반드시 일어나야 한다. 음악은 조직된 소리이지만, 그 조직에는 예상치 못한 요소가 포함되어야 하며, 그렇지 않으면 음악은 감정적으로 평범하고 기계적이 된다. 너무 많은 조직화는 기술적으로 여전히 음악일 수 있지만, 아무도 듣고 싶어 하지 않는 음악이 될 것이다.`
+};
+
+const SECTIONS = [
+  {label:`📖 독해 유형 (20~24번)`,ids:[`q20`,`q21`,`q22`,`q23`,`q24`]},
+  {label:`✏️ 어법·어휘 (29~30번)`,ids:[`q29`,`q30`]},
+  {label:`🔲 빈칸 추론 (31~33번)`,ids:[`q31`,`q32`,`q33`]},
+  {label:`🔀 문장 구조 (35·37·38번)`,ids:[`q35`,`q37`,`q38`]},
+  {label:`📋 요약 완성 (40번)`,ids:[`q40`]}
+];
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function stars(n){return '★'.repeat(n)+'☆'.repeat(3-n)}
+
+function cardHTML(q){
+  const ratHtml = q.rat.map(r=>`<li class="ritem">${esc(r)}</li>`).join('');
+  const wHtml = q.wrong ? `<div class="wbox"><span class="wlbl">✕ 오답 분석</span>${esc(q.wrong)}</div>` : '';
+  const vocHtml = q.vocab.map(v=>`<div class="vcard"><div class="vw">${esc(v.w)}<span class="vp">${esc(v.p)}</span></div><div class="vm">${esc(v.m)}</div><div class="vs">${stars(v.s)}</div></div>`).join('');
+  const strHtml = q.structs.map(s=>`<div class="sitem"><div class="sp">${esc(s.p)}</div><div class="sarr">→</div><div class="sm">${esc(s.m)}</div></div>`).join('');
+  const gramHtml = q.grammar.map(g=>`<div class="gitem"><div class="gn">${esc(g.n)}</div><div class="gd">${esc(g.d)}</div><div class="gex">${esc(g.ex)}</div></div>`).join('');
+  const tipHtml = q.tips.map(t=>`<li class="titem"><span class="tick">✔</span><span>${esc(t)}</span></li>`).join('');
+  const transHtml = TRANS[q.id] ? esc(TRANS[q.id]) : '해석을 준비 중입니다.';
+  const pid = q.id;
+  return `
+<div class="qcard ${q.tc}" id="${pid}">
+  <div class="qhead" onclick="tog('${pid}')">
+    <div class="qbar"></div>
+    <div class="qnum">${q.num}</div>
+    <div class="qtype">${esc(q.type)}</div>
+    <div class="qtopic">${esc(q.topic)}</div>
+    ${q.pts?`<div class="qpts">${esc(q.pts)}</div>`:''}
+    <svg class="qchev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="qbody">
+    <div class="qinner">
+      <div class="ansbox">
+        <div class="ansnum">${esc(q.ans)}</div>
+        <div class="anstxt"><span class="anslbl">정 답</span>${esc(q.anstxt)}</div>
+      </div>
+      <div class="kswrap">
+        <div class="kslbl">📌 주제 문장 (Topic Sentence)</div>
+        <div class="ks">${q.ks}</div>
+        <div class="ksko">${esc(q.ksko)}</div>
+      </div>
+      <div class="tabs" id="tabs-${pid}">
+        <button class="tbtn active" onclick="tab('${pid}','rat',this)">정답 근거</button>
+        <button class="tbtn" onclick="tab('${pid}','voc',this)">어휘 및 표현</button>
+        <button class="tbtn" onclick="tab('${pid}','cg',this)">구문 및 문법</button>
+        <button class="tbtn" onclick="tab('${pid}','tip',this)">출제 포인트</button>
+        <button class="tbtn" onclick="tab('${pid}','trs',this)">🇰🇷 해석</button>
+      </div>
+      <div class="tpanel active" id="${pid}-rat"><ul class="rlist">${ratHtml}</ul>${wHtml}</div>
+      <div class="tpanel" id="${pid}-voc"><div class="vgrid">${vocHtml}</div></div>
+      <div class="tpanel" id="${pid}-cg">
+        <div class="slist">${strHtml}</div>
+        <div class="glist" style="margin-top:10px">${gramHtml}</div>
+      </div>
+      <div class="tpanel" id="${pid}-tip"><ul class="tlist">${tipHtml}</ul></div>
+      <div class="tpanel" id="${pid}-trs"><div class="trans-body">${transHtml}</div></div>
+    </div>
+  </div>
+</div>`;
+}
+
+function buildPage(){
+  // Cards
+  const ca = document.getElementById('ca');
+  let html = '';
+  SECTIONS.forEach(sec => {
+    html += `<div class="slbl">${sec.label}</div>`;
+    sec.ids.forEach(id => {
+      const q = Q.find(x=>x.id===id);
+      if(q) html += cardHTML(q);
+    });
+  });
+  ca.innerHTML = html;
+
+  // Nav
+  const nav = document.getElementById('navList');
+  const navTCmap = {reading:'독해유형',lang:'어법·어휘',blank:'빈칸추론',struct:'문장구조',summary:'요약'};
+  SECTIONS.forEach(sec => {
+    const g = document.createElement('div');
+    g.className = 'nav-g';
+    const firstQ = Q.find(x=>x.id===sec.ids[0]);
+    const col = firstQ ? TC[firstQ.tc[0]] : '#888';
+    g.style.color = col;
+    g.textContent = sec.label.replace(/^[^\s]+\s/,'');
+    nav.appendChild(g);
+    sec.ids.forEach(id => {
+      const q = Q.find(x=>x.id===id);
+      if(!q) return;
+      const c = TC[q.tc[0]];
+      const btn = document.createElement('button');
+      btn.className = 'nav-item';
+      btn.id = 'nav-'+id;
+      btn.innerHTML = `<div class="nd" style="background:${c}"></div><span>${q.num}번</span><span class="nb" style="background:${c}22;color:${c}">${q.type}</span>`;
+      btn.onclick = ()=>{jumpTo(id);closeSB();};
+      nav.appendChild(btn);
+    });
+  });
+}
+
+function tog(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+  updateNav();
+}
+
+function tab(id,panelKey,btn){
+  const tabsEl = document.getElementById('tabs-'+id);
+  tabsEl.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['rat','voc','cg','tip','trs'].forEach(k=>{
+    const p = document.getElementById(id+'-'+k);
+    if(p) p.classList.toggle('active', k===panelKey);
+  });
+}
+
+function jumpTo(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(!el.classList.contains('open')) el.classList.add('open');
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),80);
+  updateNav();
+}
+
+function updateNav(){
+  const y = window.scrollY + 80;
+  let active = null;
+  Q.forEach(q=>{const el=document.getElementById(q.id);if(el&&el.offsetTop<=y)active=q.id;});
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  if(active){const n=document.getElementById('nav-'+active);if(n)n.classList.add('active');}
+}
+
+function toggleDark(){
+  const h = document.documentElement;
+  const dark = h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',dark?'light':'dark');
+  document.getElementById('di').textContent = dark?'🌙':'☀️';
+  document.getElementById('dl').textContent = dark?'다크':'라이트';
+  localStorage.setItem('t',dark?'light':'dark');
+}
+
+let stimer;
+function doSearch(val){
+  clearTimeout(stimer);
+  stimer = setTimeout(()=>runSearch(val.trim()),200);
+}
+
+function runSearch(v){
+  removeHL();
+  const cards = document.querySelectorAll('.qcard');
+  if(!v){cards.forEach(c=>c.classList.remove('hidden'));document.getElementById('sc').textContent='';return;}
+  let cnt=0;
+  cards.forEach(c=>{
+    if(c.innerText.toLowerCase().includes(v.toLowerCase())){
+      c.classList.remove('hidden');cnt++;
+      addHL(c,v);
+    } else {
+      c.classList.add('hidden');
+    }
+  });
+  document.getElementById('sc').textContent = cnt?cnt+'개 지문':'결과 없음';
+}
+
+function addHL(node,v){
+  const walker = document.createTreeWalker(node,NodeFilter.SHOW_TEXT,null,false);
+  const nodes=[];let n;
+  while((n=walker.nextNode())) nodes.push(n);
+  nodes.forEach(n=>{
+    if(!n.parentElement||n.parentElement.className==='shl') return;
+    const i=n.textContent.toLowerCase().indexOf(v.toLowerCase());
+    if(i===-1) return;
+    const span=document.createElement('span');
+    span.innerHTML=n.textContent.replace(new RegExp(`(${v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),'<mark class="shl">$1</mark>');
+    n.parentNode.replaceChild(span,n);
+  });
+}
+
+function removeHL(){
+  document.querySelectorAll('mark.shl').forEach(m=>{
+    const p=m.parentNode;if(p){p.replaceChild(document.createTextNode(m.textContent),m);p.normalize();}
+  });
+}
+
+function toggleSB(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSB(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  buildPage();
+  if(localStorage.getItem('t')==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('di').textContent='☀️';
+    document.getElementById('dl').textContent='라이트';
+  }
+  window.addEventListener('scroll',updateNav,{passive:true});
+});
+</script>
+</body>
+</html>
